@@ -24,7 +24,10 @@ export class ProjectsService {
         if (exists) {
             throw new Error('El proyecto ya existe');
         } else {
-            const newProject = this.projectsRepository.create(createProjectInput);
+            const newProject = this.projectsRepository.create();
+            newProject.name = createProjectInput.name;
+            newProject.description = createProjectInput.description;
+            newProject.idTeams = [createProjectInput.idTeam];
             return this.projectsRepository.save(newProject);
         }
     }
