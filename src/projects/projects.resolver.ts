@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProjectsService } from './projects.service';
 import { Project } from './entities/projects.entity';
 import { CreateProjectInput } from './dto/create-project.input';
@@ -13,6 +13,24 @@ export class ProjectsResolver {
   projects() {
     console.log('[*] projects');
     return this.projectsService.findAll();
+  }
+
+  @Query((returns) => Project)
+  project(@Args('id') id: number) {
+    console.log('[*] project');
+    return this.projectsService.findOne(id);
+  }
+
+  @Query((returns) => [Project])
+  projectsByTeam(@Args('idTeam') idTeam: number) {
+    console.log('[*] projectsByTeam');
+    return this.projectsService.findProjectsByTeam(idTeam);
+  }
+
+  @Query((returns) => [Project])
+  projectsByTeams(@Args('teamIds', { type: () => [Int] }) teamIds: number[]) {
+    console.log('[*] projectsByTeams');
+    return this.projectsService.findProjectsByTeams(teamIds);
   }
 
   @Mutation((returns) => Project)

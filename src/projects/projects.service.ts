@@ -15,6 +15,28 @@ export class ProjectsService {
         return this.projectsRepository.find();
     }
 
+    async findOne(id: number): Promise<Project> {
+        return this.projectsRepository.findOne({
+            where: {
+                id
+            }
+        });
+    }
+
+    async findProjectsByTeam(idTeam: number): Promise<Project[]> {
+        return this.projectsRepository
+            .createQueryBuilder('project')
+            .where(':idTeam = ANY (project."idTeams")', { idTeam })
+            .getMany();
+    }
+
+    async findProjectsByTeams(teamIds: number[]): Promise<Project[]> {
+        return this.projectsRepository
+          .createQueryBuilder('project')
+          .where('project."idTeams" && :teamIds', { teamIds })
+          .getMany();
+    }
+    
     async createProject(createProjectInput: CreateProjectInput): Promise<Project> {
         const exists = await this.projectsRepository.findOne({
             where: {
