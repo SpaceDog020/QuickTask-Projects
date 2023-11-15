@@ -5,11 +5,14 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { DeleteProjectInput } from './dto/delete-project.input';
 import { AddTeamProjectInput } from './dto/add-team-project.input';
+import { RolesService } from 'src/roles/roles.service';
+import { RemoveTeamAllProjectInput, RemoveTeamProjectInput } from './dto/remove-team-project.input';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(
-    private readonly projectsService: ProjectsService
+    private readonly projectsService: ProjectsService,
+    private readonly rolesService: RolesService,
   ) { }
 
   @Query((returns) => [Project])
@@ -82,6 +85,36 @@ export class ProjectsResolver {
     console.log('[*] addTeamProject');
     try {
       const validate = await this.projectsService.addTeamProject(addTeamProjectInput);
+      if (validate) {
+        return { response: true };
+      } else {
+        return { response: false };
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Mutation((returns) => ResponseProjects)
+  async removeTeamProject(@Args('removeTeamProjectInput') removeTeamProjectInput: RemoveTeamProjectInput) {
+    console.log('[*] removeTeamProject');
+    try {
+      const validate = await this.projectsService.removeTeamProject(removeTeamProjectInput);
+      if (validate) {
+        return { response: true };
+      } else {
+        return { response: false };
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Mutation((returns) => ResponseProjects)
+  async removeTeamAllProject(@Args('removeTeamAllProjectInput') removeTeamAllProjectInput: RemoveTeamAllProjectInput) {
+    console.log('[*] removeTeamAllProject');
+    try {
+      const validate = await this.projectsService.removeTeamAllProjects(removeTeamAllProjectInput);
       if (validate) {
         return { response: true };
       } else {
