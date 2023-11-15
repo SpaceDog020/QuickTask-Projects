@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
+import { DeleteProjectInput } from './dto/delete-project.input';
+import { AddTeamProjectInput } from './dto/add-team-project.input';
 
 @Injectable()
 export class ProjectsService {
@@ -55,10 +57,10 @@ export class ProjectsService {
         }
     }
 
-    async deleteProject(id: number): Promise<Boolean> {
+    async deleteProject(deleteProjectInput: DeleteProjectInput): Promise<Boolean> {
         const project = await this.projectsRepository.findOne({
             where: {
-                id
+                id: deleteProjectInput.id
             }
         });
         if (!project) {
@@ -80,6 +82,21 @@ export class ProjectsService {
         } else {
             project.name = updateProjectInput.name;
             project.description = updateProjectInput.description;
+            await this.projectsRepository.save(project);
+            return true;
+        }
+    }
+
+    async addTeamProject(addTeamToProject: AddTeamProjectInput): Promise<Boolean> {
+        const project = await this.projectsRepository.findOne({
+            where: {
+                id: addTeamToProject.idProject
+            }
+        });
+        if (!project) {
+            throw new Error('El proyecto no existe');
+        } else {
+            project.idTeams.push(addTeamToProject.idTeam);
             await this.projectsRepository.save(project);
             return true;
         }
