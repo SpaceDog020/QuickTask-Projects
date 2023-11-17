@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique, OneToOne, ManyToOne, Jo
 import { Role } from './roles.entity';
 
 @Entity()
-@Unique(['idRole', 'idUser', 'idProject'])
+@Unique(['idRole', 'idProject'])
 @ObjectType()
 export class Role_User {
   @PrimaryGeneratedColumn()

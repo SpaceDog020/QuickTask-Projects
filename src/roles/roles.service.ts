@@ -196,7 +196,7 @@ export class RolesService {
             }
         });
         if (!roleUser) {
-            throw new Error('El rol no existe');
+            return true;
         } else {
             await this.role_userRepository.remove(roleUser);
             return true;

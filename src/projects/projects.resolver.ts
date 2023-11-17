@@ -114,7 +114,10 @@ export class ProjectsResolver {
   async removeTeamAllProject(@Args('removeTeamAllProjectInput') removeTeamAllProjectInput: RemoveTeamAllProjectInput) {
     console.log('[*] removeTeamAllProject');
     try {
-      const validate = await this.projectsService.removeTeamAllProjects(removeTeamAllProjectInput);
+      const idUsers = removeTeamAllProjectInput.idUsers;
+      const idTeam = removeTeamAllProjectInput.idTeam;
+
+      const validate = await this.projectsService.removeTeamAllProjects(idTeam, idUsers);
       if (validate) {
         return { response: true };
       } else {

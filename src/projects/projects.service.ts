@@ -7,7 +7,7 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { DeleteProjectInput } from './dto/delete-project.input';
 import { AddTeamProjectInput } from './dto/add-team-project.input';
 import { RolesService } from 'src/roles/roles.service';
-import { RemoveTeamAllProjectInput, RemoveTeamProjectInput } from './dto/remove-team-project.input';
+import { RemoveTeamProjectInput } from './dto/remove-team-project.input';
 
 @Injectable()
 export class ProjectsService {
@@ -136,21 +136,20 @@ export class ProjectsService {
         }
     }
 
-    async removeTeamAllProjects(removeTeamAllProjectInput: RemoveTeamAllProjectInput): Promise<Boolean> {
-        const projects = await this.projectsRepository.find({
-            where: {
-                idTeams: In([removeTeamAllProjectInput.idTeam])
-            }
-        });
+    async removeTeamAllProjects(idTeam: number, idUsers: number[]): Promise<Boolean> {
+        console.log('idTeam', idTeam, 'idUsers', idUsers);
+        const projects = await this.projectsRepository.createQueryBuilder('project')
+            .where(':idTeam = ANY(project.idTeams)', { idTeam }) // Esta línea es la clave
+            .getMany();
 
         if (projects.length === 0) {
-            throw new Error('No se encontraron proyectos con el equipo especificado');
+            return true;
         }
 
         for (const project of projects) {
-            await this.rolesService.deleteRoleUserByUsers(project.id, removeTeamAllProjectInput.idUsers);
+            await this.rolesService.deleteRoleUserByUsers(project.id, idUsers);
 
-            project.idTeams = project.idTeams.filter(id => id !== removeTeamAllProjectInput.idTeam);
+            project.idTeams = project.idTeams.filter(id => id !== idTeam);
         }
 
         await this.projectsRepository.save(projects);
