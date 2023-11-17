@@ -43,7 +43,11 @@ export class RolesResolver {
     try {
       return this.rolesService.createRole(createRoleInput);
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -58,7 +62,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -73,7 +81,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -88,7 +100,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -103,7 +119,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -118,7 +138,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -133,7 +157,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -148,7 +176,11 @@ export class RolesResolver {
         return { response: false };
       }
     } catch (error) {
-      throw new Error(error.message);
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
     }
   }
 
