@@ -6,8 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { ProjectsModule } from './projects/projects.module';
-import { RolesModule } from './roles/roles.module';
 import { TasksModule } from './tasks/tasks.module';
+import { SprintsModule } from './sprints/sprints.module';
 
 @Module({
   imports: [
@@ -32,8 +32,8 @@ import { TasksModule } from './tasks/tasks.module';
       synchronize: true
     }),
     ProjectsModule,
-    RolesModule,
     TasksModule,
+    SprintsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

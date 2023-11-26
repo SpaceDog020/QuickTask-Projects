@@ -10,10 +10,6 @@ export class RemoveTeamProjectInput {
     @IsNotEmpty()
     @Field((type) => Int)
     idTeam: number;
-
-    @IsNotEmpty()
-    @Field((type) => [Int])
-    idUsers: number[];
 }
 
 @InputType()
@@ -21,8 +17,4 @@ export class RemoveTeamAllProjectInput {
     @IsNotEmpty()
     @Field((type) => Int)
     idTeam: number;
-
-    @IsNotEmpty()
-    @Field((type) => [Int])
-    idUsers: number[];
 }

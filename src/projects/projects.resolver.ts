@@ -5,14 +5,12 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { DeleteProjectInput } from './dto/delete-project.input';
 import { AddTeamProjectInput } from './dto/add-team-project.input';
-import { RolesService } from 'src/roles/roles.service';
 import { RemoveTeamAllProjectInput, RemoveTeamProjectInput } from './dto/remove-team-project.input';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(
     private readonly projectsService: ProjectsService,
-    private readonly rolesService: RolesService,
   ) { }
 
   @Query((returns) => [Project])
@@ -134,10 +132,9 @@ export class ProjectsResolver {
   async removeTeamAllProject(@Args('removeTeamAllProjectInput') removeTeamAllProjectInput: RemoveTeamAllProjectInput) {
     console.log('[*] removeTeamAllProject');
     try {
-      const idUsers = removeTeamAllProjectInput.idUsers;
       const idTeam = removeTeamAllProjectInput.idTeam;
 
-      const validate = await this.projectsService.removeTeamAllProjects(idTeam, idUsers);
+      const validate = await this.projectsService.removeTeamAllProjects(idTeam);
       if (validate) {
         return { response: true };
       } else {

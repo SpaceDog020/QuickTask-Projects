@@ -10,8 +10,8 @@ export class CreateProjectInput {
     @IsNotEmpty()
     @Field()
     description: string;
-  
+    
     @IsNotEmpty()
-    @Field((type) => Int)
-    idTeam: number;
+    @Field((type) => [Int])
+    idTeams: number[];
 }

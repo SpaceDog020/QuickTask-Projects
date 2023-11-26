@@ -6,7 +6,6 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { DeleteProjectInput } from './dto/delete-project.input';
 import { AddTeamProjectInput } from './dto/add-team-project.input';
-import { RolesService } from 'src/roles/roles.service';
 import { RemoveTeamProjectInput } from './dto/remove-team-project.input';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class ProjectsService {
     constructor(
         @InjectRepository(Project)
         private projectsRepository: Repository<Project>,
-        private rolesService: RolesService,
     ) { }
 
     async findAll(): Promise<Project[]> {
@@ -55,7 +53,7 @@ export class ProjectsService {
             const newProject = this.projectsRepository.create();
             newProject.name = createProjectInput.name;
             newProject.description = createProjectInput.description;
-            newProject.idTeams = [createProjectInput.idTeam];
+            newProject.idTeams = createProjectInput.idTeams;
             return this.projectsRepository.save(newProject);
         }
     }
@@ -69,10 +67,6 @@ export class ProjectsService {
         if (!project) {
             throw new Error('El proyecto no existe');
         } else {
-            const roles = await this.rolesService.findRolesByProject(project.id);
-            if (roles.length > 0) {
-                await this.rolesService.deleteRolesByProject({ idProject: project.id });
-            }
             await this.projectsRepository.remove(project);
             return true;
         }
@@ -126,18 +120,13 @@ export class ProjectsService {
             if (!exists) {
                 throw new Error('El equipo no existe en el proyecto');
             }
-            const deleteRolesUser = await this.rolesService.deleteRoleUserByUsers(removeTeamToProject.idProject, removeTeamToProject.idUsers);
-            if (!deleteRolesUser) {
-                throw new Error('Error al eliminar los roles de los usuarios');
-            }
             project.idTeams = project.idTeams.filter(idTeam => idTeam !== removeTeamToProject.idTeam);
             await this.projectsRepository.save(project);
             return true;
         }
     }
 
-    async removeTeamAllProjects(idTeam: number, idUsers: number[]): Promise<Boolean> {
-        console.log('idTeam', idTeam, 'idUsers', idUsers);
+    async removeTeamAllProjects(idTeam: number): Promise<Boolean> {
         const projects = await this.projectsRepository.createQueryBuilder('project')
             .where(':idTeam = ANY(project.idTeams)', { idTeam }) // Esta línea es la clave
             .getMany();
@@ -147,8 +136,6 @@ export class ProjectsService {
         }
 
         for (const project of projects) {
-            await this.rolesService.deleteRoleUserByUsers(project.id, idUsers);
-
             project.idTeams = project.idTeams.filter(id => id !== idTeam);
         }
 
