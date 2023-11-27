@@ -7,12 +7,14 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { DeleteProjectInput } from './dto/delete-project.input';
 import { AddTeamProjectInput } from './dto/add-team-project.input';
 import { RemoveTeamProjectInput } from './dto/remove-team-project.input';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Injectable()
 export class ProjectsService {
     constructor(
         @InjectRepository(Project)
         private projectsRepository: Repository<Project>,
+        private taskService: TasksService,
     ) { }
 
     async findAll(): Promise<Project[]> {
@@ -67,6 +69,7 @@ export class ProjectsService {
         if (!project) {
             throw new Error('El proyecto no existe');
         } else {
+            await this.taskService.deleteTaskByProjectId(deleteProjectInput.id);
             await this.projectsRepository.remove(project);
             return true;
         }

@@ -7,7 +7,6 @@ import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/ap
 import { ConfigModule } from '@nestjs/config';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
-import { SprintsModule } from './sprints/sprints.module';
 
 @Module({
   imports: [
@@ -33,7 +32,6 @@ import { SprintsModule } from './sprints/sprints.module';
     }),
     ProjectsModule,
     TasksModule,
-    SprintsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
