@@ -13,6 +13,10 @@ export class Task {
   @Field(type => Int, {nullable: true})
   idCreator: number;
 
+  @Column({nullable: true})
+  @Field(type => Int, {nullable: true})
+  idTeamCreator: number;
+
   @Column()
   @Field(type => Int)
   idProject: number;
@@ -20,6 +24,10 @@ export class Task {
   @Column({nullable: true})
   @Field(type => Int, {nullable: true})
   idUser: number;
+
+  @Column({nullable: true})
+  @Field(type => Int, {nullable: true})
+  idTeamUser: number;
 
   @Column()
   @Field()
@@ -40,10 +48,6 @@ export class Task {
   @Column({nullable: true})
   @Field({nullable: true})
   finishDate: string;
-
-  @Column()
-  @Field()
-  isDone: boolean;
 }
 
 @ObjectType()

@@ -1,16 +1,13 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 
 @InputType()
-export class CreateTaskInput {
+export class UpdateTaskInput {
     @Field(type => Int)
-    idCreator: number;
-
-    @Field(type => Int)
-    idTeamCreator: number;
+    id: number;
 
     @Field(type => Int)
     idProject: number;
-    
+
     @Field(type => Int, {nullable: true})
     idUser: number;
 
@@ -30,4 +27,3 @@ export class CreateTaskInput {
     finishDate: string;
 
 }
-
