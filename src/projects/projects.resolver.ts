@@ -20,13 +20,13 @@ export class ProjectsResolver {
   }
 
   @Query((returns) => Project)
-  project(@Args('id') id: number) {
+  project(@Args('id', { type: () => Int }) id: number) {
     console.log('[*] project');
     return this.projectsService.findOne(id);
   }
 
   @Query((returns) => [Project])
-  projectsByTeam(@Args('idTeam') idTeam: number) {
+  projectsByTeam(@Args('idTeam', { type: () => Int }) idTeam: number) {
     console.log('[*] projectsByTeam');
     return this.projectsService.findProjectsByTeam(idTeam);
   }

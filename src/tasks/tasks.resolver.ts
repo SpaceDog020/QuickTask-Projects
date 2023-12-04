@@ -1,4 +1,4 @@
-import { Args, Resolver } from '@nestjs/graphql';
+import { Args, Int, Resolver } from '@nestjs/graphql';
 import { TasksService } from './tasks.service';
 import { Query, Mutation} from '@nestjs/graphql';
 import { ResponseTasks, Task } from './entities/task.entity';
@@ -117,6 +117,15 @@ export class TasksResolver {
       throw new Error(errorMessage);
     }
   }
+
+
+  @Query((returns ) => [Task])
+  tasksByProjectId(@Args('projectId', { type: () => Int }) projectId: number) {
+    console.log('[*] tasksByProjectId', projectId);
+    return this.tasksService.findByProjectId(projectId);
+  }
+  
+
 }
 
 

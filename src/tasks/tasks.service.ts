@@ -186,20 +186,13 @@ export class TasksService {
         return true;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    async findByProjectId(projectId: number): Promise<Task[]> {
+        return await this.tasksRepository.find({
+            where: {
+                idProject: projectId,
+            },
+        });
+    }
 
 }
