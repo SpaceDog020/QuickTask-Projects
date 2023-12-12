@@ -67,7 +67,6 @@ export class TasksService {
         });
         if(updateTaskInput.idUser){
             updateTask.idUser = updateTaskInput.idUser;
-            updateTask.idTeamUser = updateTaskInput.idTeamUser;
         }
         if(updateTaskInput.name){
             updateTask.name = updateTaskInput.name;
@@ -101,91 +100,6 @@ export class TasksService {
             return true;
         }
     }
-
-    //Caso de que un usuario se elimine
-    async unlinkAllTaskUser(idUser: number): Promise<boolean> {
-        //Si el usuario tiene tareas asignadas, se desasignan
-        await this.tasksRepository.update({
-            idUser
-        }, {
-            idUser: null,
-            idTeamUser: null
-        });
-        
-        //Si el usuario es creador de tareas, se desasignan
-        await this.tasksRepository.update({
-            idCreator: idUser
-        }, {
-            idCreator: null,
-            idTeamCreator: null
-        });
-        return true;
-    }
-
-    //Caso de que un usuario sea expulsado de un equipo
-    async unlinkAllTaskUserTeam(idUser: number, idTeam: number): Promise<boolean> {
-        //Si el usuario tiene tareas asignadas, se desasignan
-        await this.tasksRepository.update({
-            idUser,
-            idTeamUser: idTeam
-        }, {
-            idUser: null,
-            idTeamUser: null
-        });
-
-        //Si el usuario es creador de tareas, se desasignan
-        await this.tasksRepository.update({
-            idCreator: idUser,
-            idTeamCreator: idTeam
-        }, {
-            idCreator: null,
-            idTeamCreator: null
-        });
-        return true;
-    }
-
-    //Caso de que un equipo se elimine
-    async unlinkAllTaskTeam(idTeam: number): Promise<boolean> {
-        //Si el equipo posee usuarios con tareas asignadas, se desasignan
-        await this.tasksRepository.update({
-            idTeamUser: idTeam
-        }, {
-            idUser: null,
-            idTeamUser: null
-        });
-
-        //Si el equipo posee usuarios que son creador de tareas, se desasignan
-        await this.tasksRepository.update({
-            idTeamCreator: idTeam
-        }, {
-            idCreator: null,
-            idTeamCreator: null
-        });
-        return true;
-    }
-
-    //Caso de que un equipo sea expulsado de un proyecto
-    async unlinkAllTaskTeamProject(idTeam: number, idProject: number): Promise<boolean> {
-        //Si el equipo posee usuarios con tareas asignadas, se desasignan
-        await this.tasksRepository.update({
-            idTeamUser: idTeam,
-            idProject
-        }, {
-            idUser: null,
-            idTeamUser: null
-        });
-
-        //Si el equipo posee usuarios que son creador de tareas, se desasignan
-        await this.tasksRepository.update({
-            idTeamCreator: idTeam,
-            idProject
-        }, {
-            idCreator: null,
-            idTeamCreator: null
-        });
-        return true;
-    }
-
     
     async findByProjectId(projectId: number): Promise<Task[]> {
         return await this.tasksRepository.find({
@@ -195,4 +109,11 @@ export class TasksService {
         });
     }
 
+    //Caso de que un usuario se elimine
+
+    //Caso de que un usuario sea expulsado de un equipo
+
+    //Caso de que un equipo se elimine
+
+    //Caso de que un equipo sea expulsado de un proyecto
 }

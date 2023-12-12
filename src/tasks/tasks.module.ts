@@ -7,8 +7,8 @@ import { ProjectsModule } from 'src/projects/projects.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task]), forwardRef(() => ProjectsModule),], // for TypeORM to make a connection to the database
+  imports: [TypeOrmModule.forFeature([Task]), forwardRef(() => ProjectsModule),],
   providers: [TasksResolver, TasksService],
-  exports: [TasksService]  //resolver is coms with graphql and service is for business logic 
+  exports: [TasksService]
 })
 export class TasksModule {}

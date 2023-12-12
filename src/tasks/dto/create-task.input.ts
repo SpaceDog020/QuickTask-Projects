@@ -6,16 +6,10 @@ export class CreateTaskInput {
     idCreator: number;
 
     @Field(type => Int)
-    idTeamCreator: number;
-
-    @Field(type => Int)
     idProject: number;
     
     @Field(type => Int, {nullable: true})
     idUser: number;
-
-    @Field(type => Int, {nullable: true})
-    idTeamUser: number;
 
     @Field()
     name: string;
