@@ -124,7 +124,6 @@ export class ProjectsService {
                 throw new Error('El equipo no existe en el proyecto');
             }
             project.idTeams = project.idTeams.filter(idTeam => idTeam !== removeTeamToProject.idTeam);
-            await this.taskService.unlinkAllTaskTeamProject(removeTeamToProject.idTeam, removeTeamToProject.idProject);
             await this.projectsRepository.save(project);
             return true;
         }
@@ -141,7 +140,6 @@ export class ProjectsService {
             for (const project of projects) {
                 project.idTeams = project.idTeams.filter(id => id !== idTeam);
             }
-            await this.taskService.unlinkAllTaskTeam(idTeam);
             await this.projectsRepository.save(projects);
             return true;
         }
