@@ -110,6 +110,28 @@ export class TasksService {
     }
 
     //Caso de que un usuario se elimine
+    async unlinkAllTaskUser(idUser: number): Promise<boolean> {
+        const tasksUser = await this.tasksRepository.find({
+            where: {
+                idUser
+            }
+        });
+        tasksUser.forEach(async task => {
+            task.idUser = null;
+            await this.tasksRepository.save(task);
+        });
+
+        const taskCreator = await this.tasksRepository.find({
+            where: {
+                idCreator: idUser
+            }
+        });
+        taskCreator.forEach(async task => {
+            task.idCreator = null;
+            await this.tasksRepository.save(task);
+        });
+        return true;
+    }
 
     //Caso de que un usuario sea expulsado de un equipo
 

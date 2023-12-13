@@ -5,6 +5,7 @@ import { ResponseTasks, Task } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { DeleteTaskInput } from './dto/delete-task.input';
+import { UnlinkAllTaskUserInput } from './dto/unlink-task.input';
 
 @Resolver()
 export class TasksResolver {
@@ -77,14 +78,32 @@ export class TasksResolver {
     }
   }
 
-
   @Query((returns ) => [Task])
   tasksByProjectId(@Args('projectId', { type: () => Int }) projectId: number) {
-    console.log('[*] tasksByProjectId', projectId);
+    console.log('[*] tasksByProjectId');
     return this.tasksService.findByProjectId(projectId);
   }
   
-
+  @Mutation((returns ) => ResponseTasks)
+  async unlinkAllTaskUser(@Args('unlinkAllTaskUserInput') unlinkAllTaskUserInput: UnlinkAllTaskUserInput)
+  {
+    console.log('[*] unlinkAllTaskUser');
+    try{
+      const validate = await this.tasksService.unlinkAllTaskUser(unlinkAllTaskUserInput.idUser);
+      if (validate) {
+        return { response: true };
+      } else {
+        return { response: false };
+      }
+    }
+    catch (error){
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
+    }
+  }
 }
 
 
