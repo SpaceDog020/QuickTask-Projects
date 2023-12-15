@@ -77,6 +77,8 @@ export class TasksService {
         });
         if(updateTaskInput.idUser){
             updateTask.idUser = updateTaskInput.idUser;
+        }else{
+            updateTask.idUser = null;
         }
         if(updateTaskInput.name){
             updateTask.name = updateTaskInput.name;
@@ -89,9 +91,13 @@ export class TasksService {
         }
         if(updateTaskInput.startDate){
             updateTask.startDate = updateTaskInput.startDate.split('T')[0];
+        }else{
+            updateTask.startDate = null;
         }
         if(updateTaskInput.finishDate){
             updateTask.finishDate = updateTaskInput.finishDate.split('T')[0];
+        }else{
+            updateTask.finishDate = null;
         }
         await this.tasksRepository.save(updateTask);
         return true;
