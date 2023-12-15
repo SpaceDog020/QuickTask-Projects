@@ -88,10 +88,10 @@ export class TasksService {
             updateTask.status = updateTaskInput.status;
         }
         if(updateTaskInput.startDate){
-            updateTask.startDate = updateTaskInput.startDate;
+            updateTask.startDate = updateTaskInput.startDate.split('T')[0];
         }
         if(updateTaskInput.finishDate){
-            updateTask.finishDate = updateTaskInput.finishDate;
+            updateTask.finishDate = updateTaskInput.finishDate.split('T')[0];
         }
         await this.tasksRepository.save(updateTask);
         return true;
