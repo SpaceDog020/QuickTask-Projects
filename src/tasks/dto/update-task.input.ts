@@ -17,6 +17,9 @@ export class UpdateTaskInput {
     @Field()
     description: string;
 
+    @Field()
+    status: string;
+
     @Field({nullable: true})
     startDate: string;
 

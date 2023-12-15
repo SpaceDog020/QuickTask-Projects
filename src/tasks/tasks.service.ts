@@ -4,6 +4,7 @@ import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
+import { start } from 'repl';
 
 @Injectable()
 export class TasksService {
@@ -36,28 +37,37 @@ export class TasksService {
         }
         const newTask = this.tasksRepository.create(createTaskInput);
         if(createTaskInput.startDate){
-            newTask.status = 'In Progress';
-        }else{
-            newTask.status = 'To Do';
+            newTask.startDate = new Date(createTaskInput.startDate).toISOString().split('T')[0];
         }
+        if(createTaskInput.finishDate){
+            newTask.finishDate = new Date(createTaskInput.finishDate).toISOString().split('T')[0];
+        }
+        newTask.status = 'Pendiente';
+        newTask.comment = [];
         return await this.tasksRepository.save(newTask);
     }
 
     async deleteTaskByProjectId(idProject: number): Promise<boolean> {
-        await this.tasksRepository.delete({
-            idProject
+        const tasks = await this.tasksRepository.find({
+            where: {
+                idProject
+            }
+        });
+        tasks.forEach(async task => {
+            task.status = 'Eliminado';
+            await this.tasksRepository.save(task);
         });
         return true;
     }
 
     async updateTask(updateTaskInput: UpdateTaskInput): Promise<boolean> {
-        const exists= await this.tasksRepository.findOne({
+        const exists= await this.tasksRepository.find({
             where: {
                 idProject: updateTaskInput.idProject, 
                 name: updateTaskInput.name
             }
         });
-        if(exists && exists.id !== updateTaskInput.id){
+        if(exists.length > 1){
             throw new Error('Ya existe una tarea con ese nombre en el proyecto');
         }
         const updateTask = await this.tasksRepository.findOne({
@@ -74,13 +84,14 @@ export class TasksService {
         if(updateTaskInput.description){
             updateTask.description = updateTaskInput.description;
         }
+        if(updateTaskInput.status){
+            updateTask.status = updateTaskInput.status;
+        }
         if(updateTaskInput.startDate){
             updateTask.startDate = updateTaskInput.startDate;
-            updateTask.status = 'In Progress';
         }
         if(updateTaskInput.finishDate){
             updateTask.finishDate = updateTaskInput.finishDate;
-            updateTask.status = 'Done';
         }
         await this.tasksRepository.save(updateTask);
         return true;
@@ -95,7 +106,7 @@ export class TasksService {
         if(!exist){
             throw new Error('No existe una tarea con ese id');
         }else{
-            exist.status = 'Deleted';
+            exist.status = 'Eliminado';
             await this.tasksRepository.save(exist);
             return true;
         }
@@ -133,9 +144,18 @@ export class TasksService {
         return true;
     }
 
-    //Caso de que un usuario sea expulsado de un equipo
-
-    //Caso de que un equipo se elimine
-
-    //Caso de que un equipo sea expulsado de un proyecto
+    async addComment(idTask: number, comment: string): Promise<boolean> {
+        const task = await this.tasksRepository.findOne({
+            where: {
+                id: idTask
+            }
+        });
+        if(!task){
+            throw new Error('No existe una tarea con ese id');
+        }else{
+            task.comment.push(comment);
+            await this.tasksRepository.save(task);
+            return true;
+        }
+    }
 }

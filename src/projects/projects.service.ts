@@ -76,6 +76,14 @@ export class ProjectsService {
     }
 
     async updateProject(updateProjectInput: UpdateProjectInput): Promise<Boolean> {
+        const exists = await this.projectsRepository.find({
+            where: {
+                name: updateProjectInput.name
+            }
+        });
+        if (exists.length > 1) {
+            throw new Error('Ya existe un proyecto con ese nombre');
+        }
         const project = await this.projectsRepository.findOne({
             where: {
                 id: updateProjectInput.id

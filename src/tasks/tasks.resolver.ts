@@ -6,6 +6,7 @@ import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { DeleteTaskInput } from './dto/delete-task.input';
 import { UnlinkAllTaskUserInput } from './dto/unlink-task.input';
+import { AddCommentInput } from './dto/add-comment.input';
 
 @Resolver()
 export class TasksResolver {
@@ -90,6 +91,26 @@ export class TasksResolver {
     console.log('[*] unlinkAllTaskUser');
     try{
       const validate = await this.tasksService.unlinkAllTaskUser(unlinkAllTaskUserInput.idUser);
+      if (validate) {
+        return { response: true };
+      } else {
+        return { response: false };
+      }
+    }
+    catch (error){
+      const errorMessage = error.response?.errors[0]?.message || 'Error desconocido';
+      if (errorMessage === 'Error desconocido') {
+        throw new Error(error.message);
+      }
+      throw new Error(errorMessage);
+    }
+  }
+
+  @Mutation((returns ) => ResponseTasks)
+  async addComment(@Args('addCommentInput') addCommentInput: AddCommentInput) {
+    console.log('[*] addComment');
+    try{
+      const validate = await this.tasksService.addComment(addCommentInput.idTask, addCommentInput.comment);
       if (validate) {
         return { response: true };
       } else {

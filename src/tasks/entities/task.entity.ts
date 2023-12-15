@@ -33,6 +33,10 @@ export class Task {
   @Field()
   status: string;
 
+  @Column("text", { array: true, nullable: true})
+  @Field(type => [String], {nullable: true})
+  comment: string[];
+
   @Column({nullable: true})
   @Field({nullable: true})
   startDate: string;
